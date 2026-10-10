@@ -2,7 +2,7 @@
 set -euo pipefail
 
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-target="$root/ros2_ws/src/wuji_hand"
+target="$root/packages/wuji_hand"
 repo="https://github.com/wuji-technology/wujihandros2.git"
 tag="${WUJI_DRIVER_TAG:-v1.1.0}"
 

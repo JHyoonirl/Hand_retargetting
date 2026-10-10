@@ -3,9 +3,7 @@
 .venv
 .venv_*
 build
-ros2_ws/build
-ros2_ws/install
-ros2_ws/log
+ros2_ws
 __pycache__
 *.pyc
 *.log

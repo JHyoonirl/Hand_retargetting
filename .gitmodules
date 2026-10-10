@@ -1,3 +1,3 @@
-[submodule "ros2_ws/src/wuji_hand"]
-	path = ros2_ws/src/wuji_hand
+[submodule "packages/wuji_hand"]
+	path = packages/wuji_hand
 	url = https://github.com/JHyoonirl/wujihandros2.git

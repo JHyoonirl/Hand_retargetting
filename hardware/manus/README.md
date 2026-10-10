@@ -4,7 +4,7 @@ This directory contains host-side configuration for the MANUS wireless dongle an
 
 - `udev/70-manus-hid.rules` is the project copy of the device permission rule.
 - The rule must be installed on the host at `/etc/udev/rules.d/70-manus-hid.rules`; keeping it in this repository makes the setup reproducible.
-- The vendor SDK is under `vendor/manus/ManusSDK_v3.1.1/` and the ROS 2 packages are under `ros2_ws/src/`.
+- The vendor SDK is under `vendor/manus/ManusSDK_v3.1.1/` and the ROS 2 packages are under `packages/`.
 
 Install or refresh the host rule from the project root with:
 

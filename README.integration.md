@@ -1,11 +1,11 @@
 # MANUS Linux integration
 
-Inspected local project: `/home/jhyoon/Desktop/Hand_retargetting` (the requested spelling `hane_retargetting` was not found). Ubuntu 24.04, MANUS SDK 3.1.1, and ROS 2 packages. The official `wuji-technology/wujihandros2` Git checkout is now under `ros2_ws/src/wuji_hand`, with its official `wuji-description` submodule. No replacement WUJI driver or speculative joint mapping was added.
+Inspected local project: `/home/jhyoon/Desktop/Hand_retargetting` (the requested spelling `hane_retargetting` was not found). Ubuntu 24.04, MANUS SDK 3.1.1, and ROS 2 packages. The official `wuji-technology/wujihandros2` Git checkout is now under `packages/wuji_hand`, with its official `wuji-description` submodule. No replacement WUJI driver or speculative joint mapping was added.
 
 ## Changes
 
 - Both Linux Makefiles default to `ManusSDK_Integrated` and use executable-relative library lookup. To deliberately build Remote, clean first and build with `MANUS_LIBRARY=ManusSDK` (its external gRPC dependencies are required).
-- ROS `ros2_ws/src/manus_ros2/CMakeLists.txt`: Integrated by default, explicit `MANUS_SDK_ROOT`, missing-SDK checks, Curses discovery, selected-library installation and `$ORIGIN` runtime lookup. `-DMANUS_INTEGRATED=OFF` selects Remote in both linkage and initialization.
+- ROS `packages/manus_ros2/CMakeLists.txt`: Integrated by default, explicit `MANUS_SDK_ROOT`, missing-SDK checks, Curses discovery, selected-library installation and `$ORIGIN` runtime lookup. `-DMANUS_INTEGRATED=OFF` selects Remote in both linkage and initialization.
 - ROS package manifest declares native dependencies. Publisher accepts `host_ip` and positive `connection_attempts` (default 5); connection failures terminate with a nonzero exit. Any SDK connection error is rejected, an unmatched requested IP no longer falls back to another host, shutdown tolerates an absent landscape, and publication remains disabled while the required license is absent.
 - Existing `manus_glove_0`, `manus_glove_1`, etc. topics and `manus_ros2_msgs/msg/ManusGlove` schema retained. Topic numbering is discovery-dependent: consumers must check `glove_id` and `side`. These vendor messages do not contain ROS timestamps; this remains a limitation for a future teleoperation consumer.
 - `tools/manus_probe.cpp` provides a noninteractive Integrated startup/raw-frame/license diagnostic. It does not command the robot or vibrate gloves.
@@ -13,15 +13,15 @@ Inspected local project: `/home/jhyoon/Desktop/Hand_retargetting` (the requested
 - `Dockerfile.manus`, `compose.manus.yaml`: ROS 2 Jazzy container by default with Integrated builds, host networking, restricted `/dev/bus/usb` access and read-only udev data. See `README.docker.md` for deployment and USB checks.
 - `hardware/manus/udev/70-manus-hid.rules` and `hardware/wuji/udev/70-wuji-hand.rules`: MANUS/WUJI device IDs with plugdev/uaccess permissions. `tools/install_udev_rules.sh` installs both rules on the host.
 - `hardware/wuji/`: WUJI serial/calibration/firmware notes and host hardware assets.
-- `ros2_ws/src/wuji_hand/`: official `wujihandros2` Git checkout and `wuji-description` submodule. The pinned `wujihandcpp` SDK is cached under `downloads/wuji/` and installed on native hosts with `tools/install_wuji_sdk.sh`; Docker installs the same version during image build.
+- `packages/wuji_hand/`: official `wujihandros2` Git checkout and `wuji-description` submodule. The pinned `wujihandcpp` SDK is cached under `downloads/wuji/` and installed on native hosts with `tools/install_wuji_sdk.sh`; Docker installs the same version during image build.
 
 ## Current project layout
 
 ```text
 hand_retargetting/
 ├── vendor/manus/          # Unmodified MANUS SDK and vendor examples
-├── ros2_ws/
-│   └── src/               # ROS 2 packages and WUJI bridge
+├── packages/               # ROS 2 packages and WUJI bridge
+├── ros2_ws/                # generated colcon build output
 ├── hardware/
 │   ├── manus/              # MANUS host rules and notes
 │   └── wuji/               # WUJI hardware assets

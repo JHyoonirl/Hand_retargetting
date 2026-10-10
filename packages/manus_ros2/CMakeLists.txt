@@ -23,7 +23,7 @@ target_compile_features(manus_glove_markers PUBLIC cxx_std_17)
 ament_target_dependencies(manus_glove_markers
   rclcpp geometry_msgs visualization_msgs manus_ros2_msgs)
 set(MANUS_SDK_ROOT
-  "${CMAKE_CURRENT_SOURCE_DIR}/../../../vendor/manus/ManusSDK_v3.1.1/ROS2/ManusSDK"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../../vendor/manus/ManusSDK_v3.1.1/ROS2/ManusSDK"
   CACHE PATH "MANUS Linux SDK directory")
 option(MANUS_INTEGRATED "Link the standalone Core Integrated SDK" ON)
 if(MANUS_INTEGRATED)

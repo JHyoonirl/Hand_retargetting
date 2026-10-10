@@ -41,7 +41,7 @@ WORKDIR /work
 # subtree. Keep the image and registry private because the SDK is licensed.
 COPY vendor/manus/ManusSDK_v3.1.1/ROS2/ManusSDK \
   /work/vendor/manus/ManusSDK_v3.1.1/ROS2/ManusSDK
-COPY ros2_ws/src /work/ros2_ws/src
+COPY packages /work/packages
 COPY vendor/wuji-retargeting /work/vendor/wuji-retargeting
 COPY tools/build_probe.sh tools/build_ros.sh tools/install_wuji_retargeting.sh tools/manus_probe.cpp /work/tools/
 

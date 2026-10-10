@@ -8,4 +8,4 @@ source /opt/ros/jazzy/setup.bash
 source "$root/ros2_ws/install/setup.bash"
 set -u
 exec "$root/.venv/bin/python" \
-  "$root/ros2_ws/src/manus_ros2/client_scripts/manus_data_viz.py" "$@"
+  "$root/packages/manus_ros2/client_scripts/manus_data_viz.py" "$@"

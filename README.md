@@ -1,13 +1,18 @@
 # MANUS + WUJI 손 리타게팅
 
-이 작업공간은 독점 MANUS SDK를 ROS 2 소스 패키지와 분리하고, WUJI 손
-드라이버를 둘 전용 경로를 제공합니다.
+이 저장소는 ROS 2 패키지 소스를 `packages/`에 모으고, 독점 MANUS SDK와
+하드웨어 설정을 분리합니다. 독립 실행에 필요한 빌드 결과는 `ros2_ws/`에 생성됩니다.
+다른 저장소의 `ros2_ws/src/`에 submodule로 포함될 때는 `COLCON_IGNORE`로 기본 빌드에서
+제외됩니다. `HAND_ROS_WS=/path/to/ros2_ws bash tools/build_ros.sh`를 사용하면 그
+workspace의 `build/`와 `install/`에 Hand 패키지를 추가할 수 있습니다.
 
 ```text
 vendor/manus/ManusSDK_v3.1.1/  MANUS SDK, 라이브러리, 예제
-ros2_ws/src/manus_ros2/        MANUS publisher와 RViz marker bridge
-ros2_ws/src/manus_ros2_msgs/   MANUS 메시지 정의
-ros2_ws/src/wuji_hand/         공식 wujihandros2 Git checkout와 description 서브모듈
+packages/manus_ros2/          MANUS publisher와 RViz marker bridge
+packages/manus_ros2_msgs/     MANUS 메시지 정의
+packages/manus_wuji_retargeting/  MANUS-WUJI 리타게팅 노드
+packages/wuji_hand/           공식 wujihandros2 Git checkout와 description 서브모듈
+ros2_ws/                     독립 빌드 결과 (버전 관리 제외)
 hardware/manus/                MANUS udev 규칙과 호스트 메모
 hardware/wuji/                 WUJI 하드웨어 파일과 캘리브레이션 자료
 downloads/wuji/                고정된 WUJI SDK 패키지 캐시(버전 관리 제외)
@@ -68,7 +73,7 @@ clone은 소스와 SDK 파일을 받는 단계입니다. ROS 2, WUJI SDK, Python
 
 ## WUJI 손: 공식 드라이버
 
-[`ros2_ws/src/wuji_hand`](ros2_ws/src/wuji_hand/README.integration.md)는 공식
+[`packages/wuji_hand`](packages/wuji_hand/README.integration.md)는 공식
 [`wuji-technology/wujihandros2`](https://github.com/wuji-technology/wujihandros2)
 저장소와 `wuji-description` 서브모듈을 포함한 checkout입니다. 별도의 WUJI
 대체 드라이버나 임의로 만든 평활화 알고리즘은 사용하지 않습니다. 공식
@@ -273,7 +278,7 @@ ros2 topic hz /manus_glove_0
 
 두 명령 모두 데이터가 나오면 새 WUJI launch를 실행하지 않고 터미널 3만
 실행하십시오. 상세한 재시작 순서와 dry-run 절차는
-[retargeting README](ros2_ws/src/manus_wuji_retargeting/README.md)를 참고하십시오.
+[retargeting README](packages/manus_wuji_retargeting/README.md)를 참고하십시오.
 
 명령 노드가 시작되면 `/hand_0/set_enabled`를 한 번 호출해 전체 관절을 자동으로
 enable합니다. 따라서 이전 테스트에서 모터를 disable한 상태에서도 새 세션을

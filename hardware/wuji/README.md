@@ -11,7 +11,7 @@ upstream 저장소로 유지합니다. 손 시리얼 번호, 펌웨어 메모, �
 sudo bash tools/install_udev_rules.sh
 ```
 
-`ros2_ws/src/wuji_hand`의 공식 드라이버가 사용하는 토픽과 서비스는 다음과
+`packages/wuji_hand`의 공식 드라이버가 사용하는 토픽과 서비스는 다음과
 같습니다.
 
 ```text

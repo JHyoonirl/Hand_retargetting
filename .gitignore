@@ -1,7 +1,5 @@
 .venv/
-ros2_ws/build/
-ros2_ws/install/
-ros2_ws/log/
+ros2_ws/
 build/
 vendor/manus/ManusSDK_v3.1.1/**/objects/
 vendor/manus/ManusSDK_v3.1.1/**/SDKClient_*out
