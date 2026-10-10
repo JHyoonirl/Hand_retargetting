@@ -15,6 +15,57 @@ tools/                         빌드, 진단, 실행 스크립트
 .venv/                         공용 Python/Open3D 가상환경
 ```
 
+## 저장소 받기 (clone)
+
+Ubuntu에서 Git과 Git LFS를 먼저 설치합니다. MANUS SDK의 대용량 `.so`
+라이브러리는 Git LFS로 관리하므로, clone 전에 LFS를 활성화해야 합니다.
+
+```bash
+sudo apt update
+sudo apt install git git-lfs
+git lfs install
+
+git clone --recurse-submodules https://github.com/JHyoonirl/Hand_retargetting.git
+cd Hand_retargetting
+git lfs pull
+```
+
+`--recurse-submodules`는 WUJI 드라이버와 그 안의 `wuji-description`까지
+프로젝트에 기록된 커밋으로 내려받습니다. GitHub의 **Download ZIP** 대신 위
+명령을 사용하세요. SDK 바이너리 다운로드에는 약 261MB가 추가로 필요합니다.
+
+이미 일반 `git clone`으로 받은 경우에는 저장소 안에서 다음을 실행합니다.
+Git LFS가 없다면 위 설치 명령부터 실행하세요.
+
+```bash
+git lfs install
+git submodule update --init --recursive
+git lfs pull
+```
+
+다운로드 결과를 확인할 수 있습니다.
+
+```bash
+git submodule status --recursive
+git lfs fsck
+```
+
+서브모듈 상태의 커밋 앞에 `-`나 `+`가 없고, LFS 검사에서
+`Git LFS fsck OK`가 표시되면 정상입니다.
+
+이후 최신 프로젝트 변경 사항을 받을 때는 로컬 수정 사항을 먼저 커밋하거나
+stash한 뒤, 최상위 폴더에서 실행합니다.
+
+```bash
+git pull --ff-only
+git submodule sync --recursive
+git submodule update --init --recursive
+git lfs pull
+```
+
+clone은 소스와 SDK 파일을 받는 단계입니다. ROS 2, WUJI SDK, Python 가상환경과
+빌드 결과는 별도로 준비해야 하며, 아래 설치·빌드 안내를 이어서 진행하세요.
+
 ## WUJI 손: 공식 드라이버
 
 [`ros2_ws/src/wuji_hand`](ros2_ws/src/wuji_hand/README.integration.md)는 공식
