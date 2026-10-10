@@ -6,6 +6,28 @@
 제외됩니다. `HAND_ROS_WS=/path/to/ros2_ws bash tools/build_ros.sh`를 사용하면 그
 workspace의 `build/`와 `install/`에 Hand 패키지를 추가할 수 있습니다.
 
+## RobotTeleoperationFramework 통합 Docker
+
+프레임워크 루트의 Dockerfile은 이 저장소 설정을 참조해 Indy7, Vive, MANUS 입력,
+MANUS-WUJI retargeting, WUJI 드라이버를 한 ROS 설치 경로에 넣을 수 있습니다.
+Hand submodule을 초기화하고 MANUS SDK LFS 파일을 받은 뒤 프레임워크 루트에서 실행합니다.
+
+```bash
+git -C ros2_ws/src/hand_retargetting lfs pull
+make docker-build INCLUDE_HAND=1
+make docker-run INCLUDE_HAND=1
+```
+
+`INCLUDE_HAND=1`은 메인 Dockerfile의 `with-hand` 타깃을 선택합니다. WUJI SDK 버전과
+체크섬은 `tools/wuji_sdk.env`를 사용하고, 패키지 의존성과 빌드 순서는 `tools/build_ros.sh`를
+따릅니다. 이 타깃은 MANUS SDK를 이미지에 포함하므로 해당 이미지를
+비공개로 관리하세요. 일반 `make docker-build`는 Hand SDK를 포함하지 않습니다.
+
+통합 컨테이너 실행 시 USB 버스가 전달됩니다. MANUS publisher, retargeting 노드,
+WUJI 드라이버는 자동으로 시작되지 않으며, 실행 순서와 하드웨어 권한 설정은 아래
+Docker 및 하드웨어 안내를 따릅니다. Hand 전용 이미지를 별도로 유지하려면 저장소 루트의
+`make docker-build-hand`를 사용합니다.
+
 ```text
 vendor/manus/ManusSDK_v3.1.1/  MANUS SDK, 라이브러리, 예제
 packages/manus_ros2/          MANUS publisher와 RViz marker bridge
