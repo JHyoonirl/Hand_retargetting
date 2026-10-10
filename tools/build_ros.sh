@@ -7,8 +7,12 @@ sdk_root=${MANUS_SDK_ROOT:-$root/vendor/manus/ManusSDK_v3.1.1/ROS2/ManusSDK}
 workspace=${HAND_ROS_WS:-$root/ros2_ws}
 mkdir -p "$workspace"
 cd "$workspace"
+layout_args=()
+if [[ -n "${HAND_ROS_WS:-}" ]]; then
+  layout_args+=(--merge-install)
+fi
 build_core() {
-  colcon build --base-paths "$root/packages" --symlink-install \
+  colcon build "${layout_args[@]}" --base-paths "$root/packages" --symlink-install \
     --packages-up-to manus_ros2 manus_wuji_retargeting \
     --cmake-args -DMANUS_INTEGRATED=ON -DMANUS_SDK_ROOT="$sdk_root" "$@"
 }
@@ -16,9 +20,9 @@ build_core() {
 build_wuji() {
   local -a wuji_packages=(wujihand_driver wujihand_bringup)
   if [[ $# -gt 0 ]]; then
-    colcon build --base-paths "$root/packages" --symlink-install --packages-select "${wuji_packages[@]}" --cmake-args "$@"
+    colcon build "${layout_args[@]}" --base-paths "$root/packages" --symlink-install --packages-select "${wuji_packages[@]}" --cmake-args "$@"
   else
-    colcon build --base-paths "$root/packages" --symlink-install --packages-select "${wuji_packages[@]}"
+    colcon build "${layout_args[@]}" --base-paths "$root/packages" --symlink-install --packages-select "${wuji_packages[@]}"
   fi
 }
 
