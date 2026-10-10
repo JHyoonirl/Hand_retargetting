@@ -1,0 +1,69 @@
+ARG ROS_DISTRO=jazzy
+FROM ros:${ROS_DISTRO}-ros-base
+
+ARG ROS_DISTRO
+ENV ROS_DISTRO=${ROS_DISTRO}
+ENV DEBIAN_FRONTEND=noninteractive
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    ca-certificates \
+    cmake \
+    libncurses-dev \
+    libspdlog-dev \
+    libudev-dev \
+    libusb-1.0-0-dev \
+    python3-colcon-common-extensions \
+    python3-pip \
+    ros-${ROS_DISTRO}-joint-state-publisher \
+    ros-${ROS_DISTRO}-robot-state-publisher \
+    ros-${ROS_DISTRO}-rviz2 \
+    wget \
+    zlib1g-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+# The official WUJI ROS 2 driver wraps this SDK. Keep the version and checksum
+# in one project file so native setup and Docker use the same dependency.
+COPY tools/wuji_sdk.env /tmp/wuji_sdk.env
+RUN source /tmp/wuji_sdk.env \
+  && wget -q "$WUJI_SDK_URL" -O /tmp/wujihandcpp.deb \
+  && echo "$WUJI_SDK_SHA256  /tmp/wujihandcpp.deb" | sha256sum -c - \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends /tmp/wujihandcpp.deb \
+  && rm -f /tmp/wujihandcpp.deb \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /work
+
+# The proprietary SDK is intentionally copied only from the Linux ROS SDK
+# subtree. Keep the image and registry private because the SDK is licensed.
+COPY vendor/manus/ManusSDK_v3.1.1/ROS2/ManusSDK \
+  /work/vendor/manus/ManusSDK_v3.1.1/ROS2/ManusSDK
+COPY ros2_ws/src /work/ros2_ws/src
+COPY vendor/wuji-retargeting /work/vendor/wuji-retargeting
+COPY tools/build_probe.sh tools/build_ros.sh tools/install_wuji_retargeting.sh tools/manus_probe.cpp /work/tools/
+
+RUN bash /work/tools/install_wuji_retargeting.sh \
+  && source "/opt/ros/${ROS_DISTRO}/setup.bash" \
+  && bash /work/tools/build_probe.sh \
+  && bash /work/tools/build_ros.sh -DBUILD_TESTING=OFF
+
+ENV XDG_CONFIG_HOME=/var/lib/manus
+RUN mkdir -p /var/lib/manus
+
+# Source ROS Jazzy and the workspace automatically for both the entrypoint and
+# interactive shells opened later with `docker compose exec`.
+COPY tools/manus_ros_setup.sh /etc/profile.d/manus-ros.sh
+RUN printf '%s\n' \
+  '# MANUS ROS workspace setup for interactive non-login Bash shells.' \
+  'if [[ $- == *i* ]] && [[ -f /etc/profile.d/manus-ros.sh ]]; then' \
+  '  source /etc/profile.d/manus-ros.sh' \
+  'fi' >> /etc/bash.bashrc
+
+COPY tools/ros_entrypoint.sh /usr/local/bin/manus-ros-entrypoint
+RUN chmod +x /usr/local/bin/manus-ros-entrypoint
+
+ENTRYPOINT ["/usr/local/bin/manus-ros-entrypoint"]
+CMD ["ros2", "run", "manus_ros2", "manus_data_publisher", "--ros-args", "-p", "connection_attempts:=5"]

@@ -1,0 +1,4 @@
+# MANUS documented device identifiers; install on the host, then replug devices.
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="3325", MODE:="0660", GROUP="plugdev", TAG+="uaccess"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1915", ATTRS{idProduct}=="83fd", MODE:="0660", GROUP="plugdev", TAG+="uaccess"
+KERNEL=="hidraw*", ATTRS{idVendor}=="3325", MODE:="0660", GROUP="plugdev", TAG+="uaccess"

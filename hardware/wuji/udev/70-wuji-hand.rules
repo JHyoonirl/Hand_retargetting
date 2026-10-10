@@ -1,0 +1,4 @@
+# WUJI hand USB device (VID:PID 0483:2000).
+# The official wujihandcpp SDK uses libusb and needs access to the USB device
+# node for serial discovery and hand control.
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="2000", MODE:="0660", GROUP="plugdev", TAG+="uaccess"

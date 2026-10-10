@@ -1,0 +1,16 @@
+.git
+.gitignore
+.venv
+.venv_*
+build
+ros2_ws/build
+ros2_ws/install
+ros2_ws/log
+__pycache__
+*.pyc
+*.log
+
+# The image only needs the Linux ROS SDK subtree.
+vendor/manus/ManusSDK_v3.1.1/SDKClient_*
+vendor/manus/ManusSDK_v3.1.1/SDKMinimalClient_*
+vendor/manus/ManusSDK_v3.1.1/SDKClient.sln

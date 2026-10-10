@@ -1,0 +1,22 @@
+.venv/
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+build/
+vendor/manus/ManusSDK_v3.1.1/**/objects/
+vendor/manus/ManusSDK_v3.1.1/**/SDKClient_*out
+vendor/manus/ManusSDK_v3.1.1/**/SDKMinimalClient_*out
+*.log
+downloads/wuji/*.deb
+
+# Local build outputs and Python caches
+/install/
+/log/
+log.txt
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+*.egg-info/
+vendor/manus/ManusSDK_v3.1.1/**/SDKMinimalClient.out
