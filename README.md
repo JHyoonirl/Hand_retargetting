@@ -25,8 +25,9 @@ make docker-run INCLUDE_HAND=1
 
 통합 컨테이너 실행 시 USB 버스가 전달됩니다. MANUS publisher, retargeting 노드,
 WUJI 드라이버는 자동으로 시작되지 않으며, 실행 순서와 하드웨어 권한 설정은 아래
-Docker 및 하드웨어 안내를 따릅니다. Hand 전용 이미지를 별도로 유지하려면 저장소 루트의
-`make docker-build-hand`를 사용합니다.
+Docker 및 하드웨어 안내를 따릅니다. 통합 컨테이너를 여러 터미널에서 쓸 때는 프레임워크
+[README의 `docker exec` 예시](../../../README.md#hand-retargetting-프로젝트)를 사용합니다.
+Hand 전용 이미지를 별도로 유지하려면 저장소 루트의 `make docker-build-hand`를 사용합니다.
 
 ```text
 vendor/manus/ManusSDK_v3.1.1/  MANUS SDK, 라이브러리, 예제
